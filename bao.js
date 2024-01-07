@@ -22,20 +22,38 @@ function play(playerSelection, computerSelection){
 function game(){
     let player = 0;
     let computer = 0;
-    for (let i=0; i<5; i++){
-        const playerSelection = prompt('Choose: ');
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('click', handleButtonClick);
+    });
+    function handleButtonClick(e) {
+        const clickedButton = e.target;
+        const playerSelection = clickedButton.textContent;
         const computerSelection = getComputerChoice();
-        const result = play(playerSelection, computerSelection);
-        if (result === 'win') player++;
-        if (result === 'lose') computer++;
-        console.log(
-            'player: ' + player + '\n'
-            + 'computer: ' + computer
-        );
+        const result = play(playerSelection,computerSelection);
+        if (result === 'win'){
+            player ++;
+        }
+        else if (result === 'lose'){
+            computer++
+        } 
+        const div = document.querySelector('div');
+        div.textContent = 'player: ' + player + ', ' + 'computer: ' + computer;
+        if (player === 5 || computer === 5){
+            if (player === 5) div.innerHTML += '<br>You Win';
+            else div.innerHTML += '<br>You Lose';
+            buttons.forEach(button => {
+                button.disabled = true;
+            });
+            const body = document.querySelector('body');
+            const restart = document.createElement('button');
+            body.appendChild(restart);
+            restart.textContent = 'restart';
+            restart.addEventListener('click', () => {
+                location.reload();
+            })
+        }
     }
-    if (player > computer) console.log('You win');
-    else if (player < computer) console.log('You lose');
-    else console.log('Tie');
 }
 
 game();
